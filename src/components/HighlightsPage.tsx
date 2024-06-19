@@ -12,9 +12,9 @@ const API_KEY = "8346f008a1cf41bbba4382869db124d5";
 function HighlightsPage() {
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [noNews, setNoNews] = useState(false);
     useEffect(() => {
         setNews([]);
-        setLoading(true);
         const getNews = async () => {
             try {
                 const res = await fetch(
@@ -22,6 +22,9 @@ function HighlightsPage() {
                 );
                 const data = await res.json();
                 setNews(data);
+                if (data.length > 0) {
+                    setNoNews(false);
+                }
             } catch (e) {
                 console.log("Couldn't fetch news from API");
             } finally {
@@ -33,12 +36,12 @@ function HighlightsPage() {
     return (
         <>
             {loading && (
-                <div className="flex justify-center m-4">
+                <div className="flex justify-center h-screen items-center">
                     <span className="loading loading-spinner loading-md"></span>
-                    <p className="text-2xl px-4">Loading news..</p>
+                    <span className="text-2xl px-4">Loading news..</span>
                 </div>
             )}
-            {!loading && (
+            {!noNews && (
                 <div className="h-screen w-full carousel carousel-vertical rounded-box">
                     {images.map((image, index) => (
                         <div
@@ -77,6 +80,13 @@ function HighlightsPage() {
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+            {noNews && (
+                <div>
+                    <span className="flex justify-center items-center h-screen text-2xl">
+                        Sorry, No news found!! 😔😔
+                    </span>
                 </div>
             )}
         </>

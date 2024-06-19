@@ -7,7 +7,7 @@ const images = [
     "https://plus.unsplash.com/premium_photo-1718570262641-54c3ea3142e9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 ];
 
-const API_KEY = "8346f008a1cf41bbba4382869db124d5";
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 function HighlightsPage() {
     const [news, setNews] = useState([]);

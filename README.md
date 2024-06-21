@@ -6,8 +6,6 @@ It's a simple website to view news highlights from different websites, users can
 
 ![App Screenshot](screenshots/ss1.png?raw=trueb)
 
-![App Screenshot](screenshots/ss2.png?raw=true)
-
 ![App Screenshot](screenshots/ss3.png?raw=true)
 
 ![App Screenshot](screenshots/ss4.png?raw=true)

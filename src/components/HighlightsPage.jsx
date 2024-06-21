@@ -1,28 +1,25 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-
-const images = [
-    "https://plus.unsplash.com/premium_photo-1718204436526-277f9f34607c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8",
-    "https://plus.unsplash.com/premium_photo-1718570262641-54c3ea3142e9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-];
+import backup_img from "../assets/backupnews.png";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 function HighlightsPage() {
-    const [news, setNews] = useState([]);
+    const [newsHighlights, setNewsHighlights] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [noNews, setNoNews] = useState(false);
+    const [noNews, setNoNews] = useState(true);
     useEffect(() => {
-        setNews([]);
+        setNewsHighlights([]);
         const getNews = async () => {
             try {
                 const res = await fetch(
-                    `https://newsapi.org/v2/top-headlines?country=in&apiKey=${API_KEY}`
+                    `https://newsapi.org/v2/top-headlines?country=in&pageSize=50&apiKey=${API_KEY}`
                 );
                 const data = await res.json();
-                setNews(data);
-                if (data.length > 0) {
+                console.log(data);
+                setNewsHighlights(data.articles);
+                if (data.articles.length > 0) {
                     setNoNews(false);
                 }
             } catch (e) {
@@ -43,7 +40,7 @@ function HighlightsPage() {
             )}
             {!noNews && (
                 <div className="h-screen w-full carousel carousel-vertical rounded-box">
-                    {images.map((image, index) => (
+                    {newsHighlights.map((news, index) => (
                         <div
                             key={index}
                             className="carousel-item h-full w-full"
@@ -51,28 +48,33 @@ function HighlightsPage() {
                             <div className="hero min-h-screen bg-base-200">
                                 <div className="hero-content flex-col lg:flex-row-reverse">
                                     <img
-                                        src={image}
-                                        className="w-sm md:max-w-lg rounded-lg shadow-2xl"
+                                        src={
+                                            news.urlToImage != null
+                                                ? news.urlToImage
+                                                : backup_img
+                                        }
+                                        className="object-cover w-96 h-48 md:w-auto md:h-auto md:max-w-lg rounded-lg shadow-2xl"
                                     />
 
                                     <div>
                                         <h1 className="text-3xl md:text-5xl font-bold text-primary">
-                                            Box Office News!
+                                            {news.title}
                                         </h1>
 
-                                        <p className="text-xl md:text-2xl text-pretty py-6 md:pr-24">
-                                            Provident cupiditate voluptatem et
-                                            in. Quaerat fugiat ut assumenda
-                                            excepturi exercitationem quasi. In
-                                            deleniti eaque aut repudiandae et a
-                                            id nisi.
+                                        <p className="hidden sm:block text-xl md:text-2xl text-pretty py-6 md:pr-24">
+                                            {news.description}
                                         </p>
                                         <div className="py-2">
-                                            SOURCE: The Times of India
-                                            2024-05-08T14:52:26Z
+                                            SOURCE: {news.source.name}
+                                            <p>{news.publishedAt}</p>
                                         </div>
 
-                                        <button className="btn btn-secondary">
+                                        <button
+                                            className="btn btn-secondary"
+                                            onClick={() =>
+                                                window.open(news.url, "_blank")
+                                            }
+                                        >
                                             Read More
                                         </button>
                                     </div>

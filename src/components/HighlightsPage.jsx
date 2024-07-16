@@ -3,7 +3,7 @@ import backup_img from "../assets/backupnews.png";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 
-function HighlightsPage() {
+function HighlightsPage({ country }) {
     const [newsHighlights, setNewsHighlights] = useState([]);
     const [loading, setLoading] = useState(true);
     const [noNews, setNoNews] = useState(false);
@@ -28,7 +28,7 @@ function HighlightsPage() {
 
             try {
                 const res = await fetch(
-                    `https://api.worldnewsapi.com/top-news?source-country=in&language=en&api-key=${API_KEY}`
+                    `https://api.worldnewsapi.com/top-news?source-country=${country}&language=en&api-key=${API_KEY}`
                 );
                 const data = await res.json();
 
@@ -51,15 +51,30 @@ function HighlightsPage() {
         };
 
         getNews();
-    }, []);
+    }, [country]);
 
     const desiredDomains = [
         "ndtv.com",
         "thehindu.com",
         "indiatimes.com",
-        "bbc.co.uk",
-        "business-standard.com",
         "aninews.in",
+        "technode.com",
+        "cgtn.com",
+        "chinadaily.com.cn",
+        "scmp.com",
+        "news.abs-cbn.com",
+        "gmanetwork.com/news",
+        "rappler.com",
+        "inquirer.net",
+        "thaipbs.or.th",
+        "bangkokpost.com",
+        "nationthailand.com",
+        "thairath.co.th",
+        "cnn.com",
+        "foxnews.com",
+        "nbcnews.com",
+        "nytimes.com",
+        "washingtonpost.com",
     ];
 
     const filterNewsByDomain = (articles) => {
@@ -93,22 +108,29 @@ function HighlightsPage() {
                             className="carousel-item h-full w-full"
                         >
                             <div className="hero min-h-screen bg-base-200">
-                                <div className="hero-content flex-col lg:flex-row-reverse">
+                                <div className="hero-content flex-col lg:flex-row-reverse ">
                                     <img
                                         src={news.image || backup_img}
                                         className="object-cover w-96 h-48 md:w-auto md:h-auto md:max-w-lg rounded-lg shadow-2xl"
                                         alt="News"
                                     />
-                                    <div>
+                                    <div className="max-w-3xl">
                                         <h1 className="text-clamp-4 text-xl md:text-5xl font-bold text-primary">
                                             {news.title}
                                         </h1>
                                         <p className="line-clamp-3 text-lg md:text-2xl text-pretty my-6 md:pr-24">
-                                            {news.summary}
+                                            {news.text}
                                         </p>
                                         <div className="py-2">
-                                            Author: {news.author}
-                                            <p>{news.publish_date}</p>
+                                            Source:{" "}
+                                            {
+                                                news.url.match(
+                                                    /^(?:https?:\/\/)?(?:www\.)?([^\/]+)/i
+                                                )[1]
+                                            }
+                                            <p>
+                                                Published: {news.publish_date}
+                                            </p>
                                         </div>
                                         <button
                                             className="btn btn-secondary"
@@ -138,7 +160,7 @@ function HighlightsPage() {
                                                     }
                                                 }}
                                             >
-                                                <div className="modal-box">
+                                                <div className="modal-box shadow-none w-11/12 max-w-5xl leading-6 tracking-wide bg-secondary text-black">
                                                     <form method="dialog">
                                                         <button
                                                             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"

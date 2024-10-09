@@ -35,9 +35,13 @@ The website should be running on 'http://localhost:5173/'
 
 Create .env file in root directory
 
+## Docker Image
+To run it as docker image, visit: https://hub.docker.com/repository/docker/soumik10/news_webapp
+
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file (get them from NewsAPI)
+NewsAPI Website: https://newsapi.org/register
 
 `VITE_API_KEY`
 
